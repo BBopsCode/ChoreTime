@@ -1,0 +1,10 @@
+[build]
+  base = "chore-time"
+  publish = "chore-time/dist"
+  command = "yarn build"
+
+[functions]
+  directory = "chore-time/netlify/functions"
+
+[context.production.environment]
+  NODE_ENV = "production"
