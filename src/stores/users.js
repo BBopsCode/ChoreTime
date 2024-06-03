@@ -80,9 +80,6 @@ export const useUserStore = defineStore('users', () => {
         errorMessage.value = ""
         loading.value = true
 
-        if (email == 'benjiw692@gmail.com'){
-            return errorMessage.value = 'Get out of here benji, you must leave poo poo rizz monkey, stop sitting on the couch'
-        }
         // USERNAME VALIDATION
         if (username.length < 4) {
             loading.value = false
