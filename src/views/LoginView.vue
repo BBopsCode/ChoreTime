@@ -15,6 +15,8 @@ const userCredentials = reactive({
 const handleLogin = async ()=>{
   await userStore.handleLogin(userCredentials)
 
+  console.log(user.value)
+  
   if (user.value){
     router.push('/')
   }

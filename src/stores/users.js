@@ -51,6 +51,8 @@ export const useUserStore = defineStore('users', () => {
             id: existingUser.id
         }
 
+        console.log(user.value)
+
         loading.value = false
         errorMessage.value = ""
     }

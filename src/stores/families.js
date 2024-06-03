@@ -13,6 +13,23 @@ const familyInfo = ref([]);
 export const useFamilyStore = defineStore('families', () => {
     const families = ref([]);
 
+    const getFamily = async (familyId) => {
+        try {
+            const {data: familyData, error} = await supabase
+                .from('families')
+                .select('*')
+                .eq('id', familyId);
+
+            if (error) throw error;
+
+            family.value = familyData[0];
+            if (!familyData.length) {
+                console.log('No family found');
+            }
+        } catch (error) {
+            console.error('Error fetching family: ', error);
+        }
+    }
     const getFamiliesForUser = async (userId) => {
         try {
             const {data: userFamilies, error} = await supabase
@@ -71,6 +88,27 @@ export const useFamilyStore = defineStore('families', () => {
             loading.value = false;
             return errorMessage.value = error.message;
         }
+
+        const { data: userIsInFamily, error: error1 } = await supabase
+            .from('user_has_family')
+            .select('*, families!inner(uuid)')
+            .eq('user_id', userId)
+            .eq('families.uuid', familyCode.value);
+
+        if (error1) {
+            console.error('Error:', error1);
+        } else {
+            console.log('User is in family:', userIsInFamily);
+        }
+
+        console.log('User is in family:', userIsInFamily)
+
+        if (userIsInFamily.length) {
+            loadingFamily.value = false;
+            loading.value = false;
+            return errorMessage.value = "You are already in this family";
+        }
+
         const {data: user_has_family, error: error2} = await supabase
             .from('user_has_family')
             .insert([
@@ -172,6 +210,7 @@ export const useFamilyStore = defineStore('families', () => {
         familyInfo,
         joinFamilyForUser,
         getFamilyMembers,
-        familyMembers
+        familyMembers,
+        getFamily
     };
 });
