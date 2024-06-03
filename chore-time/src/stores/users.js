@@ -1,6 +1,10 @@
 import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
 import {supabase} from "@/supabase.js";
+import {useFamilyStore} from "@/stores/families.js";
+import {v4 as uuidv4} from 'uuid';
+
+import {convertStringToNumberByType} from "jsdom/lib/jsdom/living/helpers/number-and-date-inputs.js";
 
 
 export const useUserStore = defineStore('users', () => {
@@ -11,7 +15,8 @@ export const useUserStore = defineStore('users', () => {
 
 
     const handleLogin = async (credentials) => {
-        const {email, password} = credentials
+        const {password} = credentials
+        const email = credentials.email.toLowerCase()
 
         if (!password.length) {
             loading.value = false
@@ -33,7 +38,6 @@ export const useUserStore = defineStore('users', () => {
             loading.value = false
             return errorMessage.value = error.message
         }
-        console.log(response)
 
         const {data: existingUser} = await supabase
             .from("users")
@@ -50,13 +54,65 @@ export const useUserStore = defineStore('users', () => {
         loading.value = false
         errorMessage.value = ""
     }
-    const handleSignup = async (credentials, confirmPassword) => {
-        const {email, password, username, f_name, l_name} = credentials
-        if (password !== confirmPassword.value) {
+    const handleSignup = async (credentials) => {
+        const {password, first_name, last_name, confirmPassword} = credentials
+        let userID = uuidv4()
+
+        const {data: userIDExists} = await supabase
+            .from("users")
+            .select()
+            .eq('id', userID)
+
+        for (let i = 0; i < 5; i++) {
+            if (userIDExists) {
+                userID = uuidv4()
+            } else {
+                break
+            }
+        }
+
+        const email = credentials.email.toLowerCase()
+        const username = credentials.username.toLowerCase()
+
+        if (password !== confirmPassword) {
             return errorMessage.value = "Passwords do not match"
         }
         errorMessage.value = ""
         loading.value = true
+
+        // USERNAME VALIDATION
+        if (username.length < 4) {
+            loading.value = false
+            return errorMessage.value = 'Username must be at least 4 characters'
+        }
+        if (username.length > 18) {
+            loading.value = false
+            return errorMessage.value = 'Username must be less than 18 characters'
+        }
+        if (!/^[a-zA-Z0-9_]*$/.test(username)) {
+            loading.value = false
+            return errorMessage.value = 'Username can only contain letters, numbers, and underscores'
+        }
+        // PASSWORD VALIDATION
+        if (password.length < 6) {
+            loading.value = false
+            return errorMessage.value = 'Password must be at least 6 characters'
+        }
+        if (password.length > 24) {
+            loading.value = false
+            return errorMessage.value = 'Password must be less than 24 characters'
+        }
+        if (!/[a-z]/.test(password)) {
+            loading.value = false
+            return errorMessage.value = 'Password must contain at least one lowercase letter'
+        }
+
+        //First Name Validation
+        if (!first_name.length) {
+            loading.value = false
+            return errorMessage.value = 'First name cannot be empty'
+        }
+
 
         const {data: userNameExists} = await supabase
             .from("users")
@@ -82,10 +138,12 @@ export const useUserStore = defineStore('users', () => {
         }
 
         await supabase.from("users").insert({
+            id: userID,
             username,
             email,
-            f_name,
-            l_name
+            first_name,
+            last_name,
+            balance: 0
         })
 
         const {data: newUser} = await supabase
@@ -99,20 +157,30 @@ export const useUserStore = defineStore('users', () => {
             id: newUser.id,
             email: newUser.email,
             username: newUser.username,
-            f_name: newUser.f_name,
-            l_name: newUser.l_name
+            first_name: newUser.first_name,
+            last_name: newUser.last_name,
+            balance: newUser.balance
         }
-        console.log(newUser)
         loading.value = false
     }
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        const familyStore = useFamilyStore()
 
-    }
+        const {error} = await supabase.auth.signOut();
+        if (error) {
+            console.error('Error during sign out:', error);
+        } else {
+            // Clear user data
+            user.value = null;
+            // Clear family data
+            familyStore.family.value = null;
+            familyStore.familyInfo.value = [];
+        }
+    };
     const getUser = async () => {
         loadingUser.value = true
         const response = await supabase.auth.getUser()
-
-        if (!response.data) {
+        if (!response.data.user) {
             loadingUser.value = false
             return user.value = null
         }
@@ -125,23 +193,22 @@ export const useUserStore = defineStore('users', () => {
         user.value = {
             username: userWithEmail.username,
             email: userWithEmail.email,
-            f_name: userWithEmail.f_name,
-            l_name: userWithEmail.l_name,
+            first_name: userWithEmail.first_name,
+            last_name: userWithEmail.last_name,
             id: userWithEmail.id
 
         }
         loadingUser.value = false
 
-        console.log(user)
     }
 
     const clearError = () => {
         errorMessage.value = ''
     }
 
-    const test = () =>{
+    const test = () => {
         user.value = {
-            name:'Bryan'
+            name: 'Bryan'
         }
     }
 

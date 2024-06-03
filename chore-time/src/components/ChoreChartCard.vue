@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 
 const { choreChart } = defineProps(['choreChart']);
-console.log(choreChart);
 </script>
 
 <template>

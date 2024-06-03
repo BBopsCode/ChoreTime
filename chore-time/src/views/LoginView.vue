@@ -9,7 +9,7 @@ const visible = ref(false)
 const userStore = useUserStore()
 const {errorMessage, loading, user} = storeToRefs(userStore)
 const userCredentials = reactive({
-  email:'',
+  email:''.toLowerCase(),
   password:''
 })
 const handleLogin = async ()=>{
@@ -94,15 +94,18 @@ const handleLogin = async ()=>{
       </v-btn>
 
       <v-card-text class="text-center">
-        <a
+        <p
             class="text-blue text-decoration-none"
-            href="#"
-            rel="noopener noreferrer"
-            target="_blank"
+            @click="router.push('/register')"
         >
           Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
+        </p>
       </v-card-text>
     </v-card>
   </div>
 </template>
+<style scoped>
+p{
+  cursor: pointer;
+}
+</style>
