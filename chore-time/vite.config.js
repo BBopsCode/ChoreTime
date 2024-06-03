@@ -16,6 +16,11 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',  // Ensure the build output is in the dist directory
+    rollupOptions: {
+      external: [
+        '/chore-time/src/main.js'  // Add this line to mark the module as external
+      ]
+    }
   },
   base: '/chore-time/'  // Set the base to the subdirectory
 })
