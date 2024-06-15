@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeMount, onMounted, ref} from 'vue'
+import {onBeforeMount, onMounted, ref, watch} from 'vue'
 import {computed} from "vue";
 import {useUserStore} from "@/stores/users.js";
 import router from "@/router/index.js";
@@ -15,6 +15,8 @@ const fullName = computed(() => {
 onBeforeMount(async () => {
   await userStore.getUser()
 })
+
+
 const handleLogout = () => {
   userStore.handleLogout()
   router.push('/login')

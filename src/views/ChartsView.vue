@@ -1,44 +1,56 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import ChoreChartCard from "@/components/ChoreChartCard.vue";
-const choreCharts = ref([
-  {
-    id: 1,
-    name: 'Chore Chart 1',
-    description: 'This is the first chore chart',
-    mandatory: true,
+import NewChoreChartCreate from "@/components/NewChoreChartCreate.vue";
+import {useChartStore} from "@/stores/charts.js";
+import {useFamilyStore} from "@/stores/families.js";
+import {useUserStore} from "@/stores/users.js";
 
-  },
-  {
-    name: 'Chore Chart 2',
-    description: 'This is the second chore chart',
-    mandatory: false,
-    id: 2
-  },
-  {
-    name: 'Chore Chart 3',
-    description: 'This is the third chore chart',
-    mandatory: true,
-    id: 3
-  }
+const choreCharts = ref([]);
+const chartStore = useChartStore();
+const familyStore = useFamilyStore();
+const userStore = useUserStore();
+const displayModal = ref(false);
 
+const fetchChoreCharts = async () => {
+  await chartStore.fetchCharts(familyStore.family.id);
+  choreCharts.value = chartStore.charts;
+};
 
-])
+onMounted(async () => {
+  await familyStore.getFamilyInfo(userStore.user.id);
+  await fetchChoreCharts();
+});
+
+const close = async () => {
+  displayModal.value = false;
+};
+
+// Event handler for the chartCreated event
+const handleChartCreated = async () => {
+  console.log("Chart created");
+  await fetchChoreCharts(); // Fetch the updated list of chore charts
+};
+
+watch(choreCharts, (newValue) => {
+  console.log(newValue);
+});
+
 </script>
 
 <template>
+  <div class="justify-center align-center" style="display: flex">
+    <NewChoreChartCreate @chart-created="handleChartCreated" />
+    <v-btn @click="console.log(choreCharts)">Log Chore Charts</v-btn>
+  </div>
   <v-container>
     <v-row>
-      <v-col
-          v-for="choreChart in choreCharts"
-          cols="4"
-      >
-        <ChoreChartCard :choreChart="choreChart"></ChoreChartCard>
+      <v-col v-for="choreChart in choreCharts" :key="choreChart.id" cols="4">
+        <ChoreChartCard :choreChart="choreChart" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <style scoped>
-
 </style>

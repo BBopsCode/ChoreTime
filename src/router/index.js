@@ -7,7 +7,7 @@ import SavingsView from "@/views/SavingsView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import CreateFamilyView from "@/views/createFamilyView.vue";
 import JoinFamilyVue from "@/views/JoinFamilyVue.vue";
-
+import choresView from "@/views/ChoresView.vue";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -50,6 +50,13 @@ const router = createRouter({
             name: 'charts',
             component: ChartsView
         },
+        {
+            path: '/chores/:id',
+            name: 'chores',
+            component: choresView,
+            props: true
+        },
+
         {
             path: '/family',
             name: 'family',

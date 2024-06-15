@@ -11,8 +11,10 @@ const familyStore = useFamilyStore()
 const {errorMessage, loading, families} = storeToRefs(familyStore)
 const inviteCode = ref('')
 const userStore = useUserStore()
+
 const createFamily = async () => {
   await familyStore.joinFamilyForUser(userStore.user.id, inviteCode)
+  router.push('/')
 
 }
 </script>

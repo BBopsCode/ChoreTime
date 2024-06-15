@@ -66,7 +66,6 @@ export const useFamilyStore = defineStore('families', () => {
             .select('*')
             .in('id', familyIds);
 
-        console.log(familyInfo)
         if (error2) {
             loadingFamily.value = false;
             loading.value = false;
@@ -182,6 +181,7 @@ export const useFamilyStore = defineStore('families', () => {
             console.error('Error adding new family: ', error);
         }
 
+
     };
 
     const getFamilyMembers = async (familyId) => {
@@ -196,7 +196,13 @@ export const useFamilyStore = defineStore('families', () => {
             return errorMessage.value = error.message;
         }
 
-        familyMembers.value = familyMembersGrab;
+        const {data: familyMembersGrab2, error: error2} = await supabase
+            .from('users')
+            .select('*')
+            .in('id', familyMembersGrab.map(member => member.user_id));
+
+        familyMembers.value = familyMembersGrab2;
+
 
     }
     return {

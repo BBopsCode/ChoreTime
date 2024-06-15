@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from "@/stores/users.js";
-import { onMounted, computed, ref } from "vue";
+import { onMounted, computed, ref, watchEffect } from "vue";
 import { useFamilyStore } from "@/stores/families.js";
 import InviteCodeCard from "@/components/InviteCodeCard.vue";
 
@@ -10,18 +10,29 @@ const userStore = useUserStore();
 const showAddMember = ref(false);
 const isLoading = ref(true); // Add loading state
 
-onMounted(async () => {
-  try {
-    await familyStore.getFamily(familyStore.families[0].family_id);
-    console.log('This is the family');
-    console.log(familyStore.family);
-  } finally {
-    isLoading.value = false; // Update loading state
-  }
+const familyName = ref('');
+onMounted(() => {
+  watchEffect(() => {
+    if (familyStore.families.length > 0) {
+      fetchData();
+    }
+  });
 });
 
+const fetchData = async () => {
+  try {
+    await familyStore.getFamily(familyStore.families[0].family_id);
+  } finally {
+    isLoading.value = false;
+    familyName.value = familyStore.family.family_name;
+  }
+  if (!familyStore.families) {
+    router.push('/');
+  }
+};
+
 const currentFamily = computed(() => {
-  return isLoading.value ? 'Loading...' : familyStore.family.family_name;
+  return isLoading.value ? 'Loading...' : familyName.value;
 });
 
 const lastName = computed(() => {

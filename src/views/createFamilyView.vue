@@ -13,16 +13,28 @@ const familyData = reactive({
   family_name: '',
   role: ''
 })
+const fetchData = async () => {
+  try {
+    await familyStore.getFamily(familyStore.families[0].family_id);
+  } finally {
+    if (familyStore.families) {
+      router.push('/')
+    }
+  }
+};
+
 const userStore = useUserStore()
 const createFamily = async () => {
   await familyStore.addFamilyForUser(userStore.user.id, familyData)
 
-  if (families.value) {
-    router.push('/')
-  }
+  await fetchData()
+
+
 
 
 }
+
+
 </script>
 <template>
   <div style="min-width: 500px">

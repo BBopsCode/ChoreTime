@@ -1,7 +1,13 @@
 <script setup>
 import { ref } from 'vue';
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const { choreChart } = defineProps(['choreChart']);
+const toChart = () => {
+  router.push({ name: 'chores', params: { id: choreChart.id } });
+};
 </script>
 
 <template>
@@ -21,7 +27,7 @@ const { choreChart } = defineProps(['choreChart']);
           <v-spacer></v-spacer>
           <v-col cols="auto">
             <v-chip>
-              {{ choreChart.mandatory ? 'Mandatory' : 'Optional' }}
+              {{ choreChart.is_mandatory ? 'Mandatory' : 'Optional' }}
             </v-chip>
           </v-col>
         </v-row>
@@ -42,6 +48,7 @@ const { choreChart } = defineProps(['choreChart']);
                 variant="outlined"
                 block
                 class="mt-3"
+                @click="toChart"
             ></v-btn>
           </v-col>
         </v-row>

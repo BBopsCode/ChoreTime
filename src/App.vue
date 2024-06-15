@@ -23,6 +23,10 @@ onMounted(async () => {
   else if (userStore.user ) {
     await familyStore.getFamiliesForUser(userStore.user.id)
     await familyStore.getFamilyInfo(userStore.user.id)
+    await familyStore.getFamily(familyStore.families[0].family_id);
+    await familyStore.getFamilyMembers(familyStore.family.id)
+
+    console.log('User logged in', userStore.user)
   }
   showComponents.value = true
 });
