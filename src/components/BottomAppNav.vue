@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import {ref} from "vue";
+
 const value = ref(1);
 </script>
 <template>
@@ -9,30 +10,42 @@ const value = ref(1);
         v-model="value"
         color="primary"
         horizontal
+        grow
+        style="min-height: 75px"
     >
       <v-btn
-      @click="$emit('changeView', 'ChoresView')"
+          @click="$emit('changeView', 'ChoresView')"
       >
-        <v-icon>mdi-home</v-icon>
+        <v-icon class="icon">mdi-home</v-icon>
 
         Home
       </v-btn>
 
       <v-btn
-      @click="$emit('changeView', 'CreateChore')"
+          @click="$emit('changeView', 'CreateChore')"
       >
-        <v-icon>mdi-plus-box</v-icon>
+        <v-icon
+            class="icon">mdi-plus-box
+        </v-icon>
 
         Edit Chores
       </v-btn>
 
       <v-btn
-      @click="$emit('changeView', 'ChoresView')"
+          @click="$emit('changeView', 'ChoresView')"
       >
-        <v-icon>mdi-format-list-checks</v-icon>
+        <v-icon
+            class="icon">mdi-format-list-checks
+        </v-icon>
 
         Chores
       </v-btn>
     </v-bottom-navigation>
   </v-layout>
 </template>
+
+<style scoped>
+  .icon {
+    font-size: 30px;
+  }
+</style>
