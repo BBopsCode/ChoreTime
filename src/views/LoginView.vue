@@ -17,14 +17,14 @@ const handleLogin = async ()=>{
 
 
   if (user.value){
-    router.push('/')
+    router.push('/charts')
   }
 
 
 
 }
 if (user.value){
-  router.push('/')
+  router.push('/charts')
 }
 </script>
 <template>

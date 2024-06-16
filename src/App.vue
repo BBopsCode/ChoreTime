@@ -31,7 +31,7 @@ onMounted(async () => {
   showComponents.value = true
 });
 if (userStore.user) {
-  router.push('/')
+  router.push('/charts')
 }
 
 const homePages = computed(() => {

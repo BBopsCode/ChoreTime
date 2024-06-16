@@ -1,7 +1,5 @@
 <script setup>
 const props = defineProps(['chore']);
-console.log(props.chore
-)
 </script>
 <template>
   <v-card
@@ -15,9 +13,7 @@ console.log(props.chore
             <v-icon color="white">mdi-broom</v-icon>
           </v-avatar>
         </template>
-        <v-list-item-content>
           <v-list-item-title>{{ chore.name }}</v-list-item-title>
-        </v-list-item-content>
 
         <template v-slot:append>
           ${{chore.value}}

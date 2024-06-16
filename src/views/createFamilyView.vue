@@ -18,7 +18,7 @@ const fetchData = async () => {
     await familyStore.getFamily(familyStore.families[0].family_id);
   } finally {
     if (familyStore.families) {
-      router.push('/')
+      router.push('/charts')
     }
   }
 };

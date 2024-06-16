@@ -7,6 +7,7 @@ import SavingsView from "@/views/SavingsView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import CreateFamilyView from "@/views/createFamilyView.vue";
 import JoinFamilyVue from "@/views/JoinFamilyVue.vue";
+import MobileContainer from "@/components/MobileContainer.vue";
 import choresView from "@/views/ChoresView.vue";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,7 +54,7 @@ const router = createRouter({
         {
             path: '/chores/:id',
             name: 'chores',
-            component: choresView,
+            component: MobileContainer,
             props: true
         },
 

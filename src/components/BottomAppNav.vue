@@ -1,3 +1,7 @@
+<script setup>
+import { ref } from "vue";
+const value = ref(1);
+</script>
 <template>
 
   <v-layout class="overflow-visible" style="height: 56px;">
@@ -6,28 +10,29 @@
         color="primary"
         horizontal
     >
-      <v-btn>
-        <v-icon>mdi-history</v-icon>
+      <v-btn
+      @click="$emit('changeView', 'ChoresView')"
+      >
+        <v-icon>mdi-home</v-icon>
 
-        Recents
+        Home
       </v-btn>
 
-      <v-btn>
-        <v-icon>mdi-heart</v-icon>
+      <v-btn
+      @click="$emit('changeView', 'CreateChore')"
+      >
+        <v-icon>mdi-plus-box</v-icon>
 
-        Favorites
+        Edit Chores
       </v-btn>
 
-      <v-btn>
-        <v-icon>mdi-map-marker</v-icon>
+      <v-btn
+      @click="$emit('changeView', 'ChoresView')"
+      >
+        <v-icon>mdi-format-list-checks</v-icon>
 
-        Nearby
+        Chores
       </v-btn>
     </v-bottom-navigation>
   </v-layout>
 </template>
-<script>
-export default {
-  data: () => ({ value: 1 }),
-}
-</script>

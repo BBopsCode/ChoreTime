@@ -14,7 +14,7 @@ const userStore = useUserStore()
 
 const createFamily = async () => {
   await familyStore.joinFamilyForUser(userStore.user.id, inviteCode)
-  router.push('/')
+  router.push('/charts')
 
 }
 </script>

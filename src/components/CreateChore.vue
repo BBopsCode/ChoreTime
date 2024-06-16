@@ -67,12 +67,11 @@ const choreDetails = ref({
   difficulty_rating: 0,
   chart_id: chartId,
   category: 1,
-  assignees: ""
+  assignees: []
 });
 </script>
 
 <template>
-  <MobileContainer>
     <div>
 
       <v-card
@@ -120,6 +119,7 @@ const choreDetails = ref({
                 item-title="text"
                 item-value="value"
                 hide-details
+                v-model="choreDetails.assignees"
 
             >
             </v-select>
@@ -180,7 +180,6 @@ const choreDetails = ref({
       </v-card>
     </div>
 
-  </MobileContainer>
 </template>
 
 <style scoped>

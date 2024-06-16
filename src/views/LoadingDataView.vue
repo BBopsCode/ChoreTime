@@ -41,7 +41,7 @@ const loadData = async () => {
     router.push({name: "CreateFamily"})
   }
 
-  router.push(("/"))
+  router.push(('/charts'))
 }
 
 loadData()

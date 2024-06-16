@@ -26,11 +26,32 @@ export const useChoreStore = defineStore('chores', () => {
                     category:category,
                 }
             ])
+            .select('*')
+
+        console.log(newChoreData)
         if (error) {
             errorMessage.value = error.message
             return
         }
+        console.log("peeps",assignees)
+        for (let assigneesKey in assignees) {
+            await GiveUserChore(newChoreData[0].id, assignees[assigneesKey])
+        }
+    }
 
+    const GiveUserChore = async (choreId, userId) => {
+        const {data: newChoreData, error: error} = await supabase
+            .from('user_has_chore')
+            .insert([
+                {
+                    user_id: userId,
+                    chore_id: choreId
+                }
+            ])
+        if (error) {
+            errorMessage.value = error.message
+            return
+        }
     }
 
     const GetChores = async (chartId) => {

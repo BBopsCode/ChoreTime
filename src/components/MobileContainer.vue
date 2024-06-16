@@ -1,10 +1,20 @@
 <script setup>
+import { ref } from "vue";
+import BottomAppNav from "@/components/BottomAppNav.vue";
+import ChoresView from "@/views/ChoresView.vue";
+
+const currentView = ref(ChoresView);
+
+const changeView = (view) => {
+  currentView.value = view;
+};
 
 </script>
 
 <template>
   <div class="container">
-    <slot></slot>
+    <Component :is="currentView"></Component>
+    <BottomAppNav></BottomAppNav>
   </div>
 </template>
 

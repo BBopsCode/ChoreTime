@@ -27,7 +27,7 @@ const fetchData = async () => {
     familyName.value = familyStore.family.family_name;
   }
   if (!familyStore.families) {
-    router.push('/');
+    router.push('/charts');
   }
 };
 
